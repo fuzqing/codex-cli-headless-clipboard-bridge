@@ -1,0 +1,15 @@
+.cache/
+config.json
+config.title-backup.json
+*.jsonl
+*.log
+dist/
+bridge.pid
+codex-clipboard-bridge-v2/
+.env
+.env.*
+*.pem
+*.key
+id_rsa
+id_ed25519
+known_hosts

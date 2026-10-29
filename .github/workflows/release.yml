@@ -2,7 +2,9 @@ name: Release
 
 on:
   push:
+    branches: [main]
     tags: ['v*']
+    paths: [VERSION]
 
 permissions:
   contents: write
@@ -34,9 +36,12 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          $tag = $env:RELEASE_TAG
+          $tag = if ($env:GITHUB_REF_TYPE -eq 'tag') {
+              $env:GITHUB_REF_NAME
+          } else {
+              (Get-Content -LiteralPath VERSION -Raw).Trim()
+          }
           if ($tag -notmatch '^v\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$') {
               throw 'Expected a version tag such as v0.1.0-alpha.1 or v1.0.0'
           }
@@ -46,9 +51,14 @@ jobs:
               'dist/release/clipbridge-windows-amd64.zip',
               'dist/release/SHA256SUMS.txt',
               '--repo', $env:GITHUB_REPOSITORY,
-              '--verify-tag', '--generate-notes',
+              '--generate-notes',
               '--title', "Clipbridge $tag"
           )
+          if ($env:GITHUB_REF_TYPE -eq 'tag') {
+              $releaseArgs += '--verify-tag'
+          } else {
+              $releaseArgs += @('--target', $env:GITHUB_SHA)
+          }
           if ($tag.Contains('-')) { $releaseArgs += '--prerelease' }
           gh @releaseArgs
           if ($LASTEXITCODE -ne 0) { throw 'GitHub Release publication failed' }

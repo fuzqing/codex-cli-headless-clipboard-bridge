@@ -117,7 +117,9 @@ go test -v -run '^TestLiveRemoteLifecycle$'
 ## GitHub Actions 与发布
 
 - `Windows build`：`main` 推送、Pull Request 或手动运行时，在 Windows runner 上检查格式、执行 `go vet` 和测试，构建 Windows amd64 控制台 EXE，再上传名为 `clipbridge-windows-amd64` 的 Actions artifact（保留 14 天）。
-- `Release`：推送 `v*` 版本标签时重新测试和构建，并发布 EXE、ZIP 与 SHA-256 校验文件。标签包含预发布后缀（如 `v0.1.0-alpha.1`）时自动标为 prerelease。
+- `Release`：`main` 上的 `VERSION` 文件变更，或推送 `v*` 版本标签时，重新测试和构建，并发布 EXE、ZIP 与 SHA-256 校验文件。版本包含预发布后缀（如 `v0.1.0-alpha.1`）时自动标为 prerelease。更新 `VERSION` 的方式会自动为当前提交建立版本标签，无需本机 GitHub 登录。
+
+推荐修改 `VERSION` 后提交到 `main`，例如把它改为 `v0.1.0-alpha.2`。也可使用标签触发：
 
 ```powershell
 git tag v0.1.0-alpha.1

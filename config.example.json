@@ -1,0 +1,19 @@
+{
+  "ssh": {
+    "host": "debian.example.com",
+    "port": 22,
+    "user": "your-user",
+    "private_key": "~/.ssh/id_ed25519",
+    "known_hosts": "~/.ssh/known_hosts"
+  },
+  "display": ":99",
+  "window": {
+    "mode": "codex_tui",
+    "process": "WindowsTerminal.exe",
+    "class": "CASCADIA_HOSTING_WINDOW_CLASS"
+  },
+  "max_image_bytes": 20971520,
+  "max_pixels": 16000000,
+  "timeout_ms": 12000,
+  "log_level": "debug"
+}
